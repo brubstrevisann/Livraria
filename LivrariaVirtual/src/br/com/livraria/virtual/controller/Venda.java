@@ -26,10 +26,5 @@ public class Venda extends LivrariaVirtual{
 	public void setValor(float valor) {
 		this.valor = valor;
 	}
-	public void addLivro() {
-		
-	}
-	public void listarLivros() {
-		
-	}
+
 }

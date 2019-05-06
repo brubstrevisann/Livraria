@@ -3,6 +3,7 @@ package br.com.livraria.virtual.view;
 import java.util.Scanner;
 
 import br.com.livraria.virtual.controller.LivrariaVirtualDAO;
+import br.com.livraria.virtual.controller.Venda;
 import br.com.livraria.virtual.model.Eletronico;
 import br.com.livraria.virtual.model.Impresso;
 
@@ -56,6 +57,7 @@ public class LivrariaVirtual {
 		Scanner teclado = new Scanner(System.in);
 		Impresso li = new Impresso();
 		Eletronico le = new Eletronico();
+		Venda ve = new Venda();
 		
 		
 		
@@ -79,8 +81,10 @@ public class LivrariaVirtual {
             	 // String a = teclado.nextLine();
             	  
             	 //if(a=="impresso") { 
+		ve.setCliente("Robertin");
                   livraDAO.conectar();
-                  livraDAO.listarLivros();
+                  livraDAO.RealizarVenda(ve);
+                  //livraDAO.listarLivros();
                   
                   
                   

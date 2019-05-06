@@ -19,7 +19,7 @@ public class LivrariaVirtualDAO {
 	Scanner teclado = new Scanner(System.in);
 	private String url = "jdbc:mysql://localhost:3306/livrariavirtual?useSSL=false";
 	private String usuario = "root";
-	private String senha = "123456";
+	private String senha = "";
 	private Connection conn;
 	private PreparedStatement st;
     private ResultSet rs;
@@ -170,28 +170,144 @@ public class LivrariaVirtualDAO {
 
 		public void listarLivros() {
 			try {
-				PreparedStatement prep3 = (PreparedStatement) conn.prepareStatement("SELECT a.*,  b.tamanho, c.frete,estoque "
-						+ "FROM livro a, livroeletronico b,livroimpresso c "
-						+ "WHERE a.livroId = b.livroId = c.livroId;"); 
-				rs = prep3.executeQuery();
-				String r="";
-		     	while(rs.next()){
-		    	  	r +=rs.getInt("livroId")
-		    	  	+rs.getString("autores")
-		    	  	+rs.getString("editora")
-		    	  	+rs.getFloat("preco")
-		    	  	+rs.getInt("numVendas")
-		    	  	+rs.getInt("tamanho")
-		    	  	+rs.getFloat("frete")
-		    	  	+rs.getInt("estoque");
+				
+				String escolha = "";
+				System.out.println("Gostaria de listar livros eletronicos, impressos ou ambos?");
+				escolha = teclado.nextLine();
+				
+				switch(escolha){
+					
+					case "eletronicos":
+						
+						PreparedStatement prep4 = (PreparedStatement) conn.prepareStatement("SELECT a.*,  b.tamanho "
+								+ "FROM livro a, livroeletronico b "
+								+ "WHERE a.livroId = b.livroId ;"); 
+						
+						rs = prep4.executeQuery();
+						String r="";
+				     	while(rs.next()){
+				    	  	r +=("LivroId: ")+rs.getInt("livroId")+("| ")
+				    	  	+("Autores: ")+rs.getString("autores")+("| ")
+				    	  	+("Editora: ")+rs.getString("editora")+("| ")
+				    	  	+("Preço: ")+rs.getFloat("preco")+("| ")
+				    	  	+("Tamanho: ")+rs.getInt("tamanho");
+				    		}System.out.println(r);
+						
+				
+					break;
+					
+					case "impressos":
+						
+						PreparedStatement prep5 = (PreparedStatement) conn.prepareStatement("SELECT a.*,b.frete,estoque "
+								+ "FROM livro a,livroimpresso b "
+								+ "WHERE a.livroId = b.livroId;"); 
+						
+						rs = prep5.executeQuery();
+						String r2="";
+				     	while(rs.next()){
+				     		r2 +=("LivroId: ")+rs.getInt("livroId")+("| ")
+							    	 +("Autores: ")+rs.getString("autores")+("| ")
+							    	 +("Editora: ")+rs.getString("editora")+("| ")
+							     	 +("Preço: ")+rs.getFloat("preco")+("| ")
+						    	     +("Frete: ")+rs.getFloat("frete")+("| ")
+					    	   	  	 +("Estoque: ")+rs.getInt("estoque");
+				    		}System.out.println(r2);
+				
+					break;
+					
+					case "ambos":
+						
+						PreparedStatement prep3 = (PreparedStatement) conn.prepareStatement("SELECT a.*,  b.tamanho, c.frete,estoque "
+								+ "FROM livro a, livroeletronico b,livroimpresso c "
+								+ "WHERE a.livroId = b.livroId = c.livroId;"); 
+						rs = prep3.executeQuery();
+						String r3="";
+				     	while(rs.next()){
+				     		r3 +=("LivroId: ")+rs.getInt("livroId")+("| ")
+						    	 +("Autores: ")+rs.getString("autores")+("| ")
+						    	 +("Editora: ")+rs.getString("editora")+("| ")
+						     	 +("Preço: ")+rs.getFloat("preco")+("| ")
+						    	 +("Tamanho: ")+rs.getInt("tamanho")+("| ")
+					    	     +("Frete: ")+rs.getFloat("frete")+("| ")
+				    	   	  	 +("Estoque: ")+rs.getInt("estoque");
+				     		}
+				    System.out.println(r3);
+		    	  	break;
+		    	  	
+		    	  	default:
+		    	  		System.out.println("Opção invalida men");
 		    	  	
 		      	}	
-		     	System.out.println(r);
+		     	
 					
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 			
 		}
-	
+		
+		public void RealizarVenda(Venda f) {
+			
+			try {
+			
+			int qt;
+			int id;
+			String livr = "";
+			
+			System.out.println("Quantidade de livros para vender?");
+			qt = teclado.nextInt();
+				
+				switch(qt) {
+				
+				case 1:
+					System.out.println("Livro impresso, eletronico ou ambos?");
+					livr = teclado.nextLine();
+					
+					if(livr == "impresso") {
+						
+					
+					
+					System.out.println("Qual o id do livro?");
+					id = teclado.nextInt();
+				
+					
+					
+					PreparedStatement prep = (PreparedStatement) conn.prepareStatement("INSERT INTO venda (cliente,livroId) values (?,"+id+")");
+					prep.setString(1,f.getCliente());
+					prep.execute();
+						
+					PreparedStatement prep2 = (PreparedStatement) conn.prepareStatement("UPDATE livroimpresso SET  (cliente,livroId) values (?,"+id+")");
+					
+					prep2.execute();
+					}
+				}
+			
+		
+			
+		}
+			catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+		}
+		
+		public void ListarVendas() {
+			try {
+				PreparedStatement prep7 = (PreparedStatement) conn.prepareStatement("SELECT a.*,  b.* "
+						+ "FROM livro a, venda b "
+						+ "WHERE a.livroId = b.livroId ;"); 
+				
+				rs = prep7.executeQuery();
+				String r="";
+		     	while(rs.next()){
+		    	  	r +=("LivroId: ")+rs.getInt("livroId")+("| ")
+		    	  	+("Cliente: ")+rs.getInt("tamanho")+("| ")
+		    	  	+("Valor: ")+rs.getFloat("valor")+("| ")
+		    	  	+("Numero da venda: ")+rs.getInt("numVendas");
+		    		}System.out.println(r);
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
 }
