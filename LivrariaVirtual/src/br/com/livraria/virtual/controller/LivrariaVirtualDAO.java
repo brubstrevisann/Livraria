@@ -249,38 +249,71 @@ public class LivrariaVirtualDAO {
 		public void RealizarVenda(Venda f) {
 			
 			try {
-			
+				
+			float preco,frete,valortotal,qt2;
 			int qt;
 			int id;
+			int sub;
+			int re;
 			String livr = "";
 			
-			System.out.println("Quantidade de livros para vender?");
-			qt = teclado.nextInt();
-				
-				switch(qt) {
-				
-				case 1:
+			
 					System.out.println("Livro impresso, eletronico ou ambos?");
 					livr = teclado.nextLine();
 					
-					if(livr == "impresso") {
+					switch(livr) {
+					case "impresso":
+						
+						System.out.println("Qual o id do livro?");
+						id = teclado.nextInt();
+						System.out.println("Quantidade de livros para vender?");
+						qt = teclado.nextInt();
+							
+						
+						PreparedStatement prep7 = (PreparedStatement) conn.prepareStatement("SELECT estoque FROM livroimpresso WHERE livroId = "+id); 
+						rs = prep7.executeQuery();
+						String r = "";
+						while(rs.next()) {
+							r+=rs.getInt("estoque");	
+						}
+					 
+						sub=Integer.parseInt(r);
+						re=qt-sub;
+						
+						
+						PreparedStatement prep8 = (PreparedStatement) conn.prepareStatement("SELECT a.preco, b.frete FROM livro a, livroimpresso b WHERE a.livroId = "+id+" AND b.livroId ="+id); 
+						rs = prep8.executeQuery();
+						String r2 = "";
+						String r3 = "";
+						while(rs.next()) {
+							r2+=rs.getFloat("preco");
+							r3+=rs.getFloat("frete");
+						}
+						preco = Float.parseFloat(r2);
+						frete = Float.parseFloat(r3);
+						qt2=(float) qt;
+						
+						valortotal = (preco*qt)+frete;
+						System.out.println(valortotal);
 						
 					
 					
-					System.out.println("Qual o id do livro?");
-					id = teclado.nextInt();
-				
+					PreparedStatement prep10 = (PreparedStatement) conn.prepareStatement("INSERT INTO venda (cliente,livroId,valor) values (?,?,?)");
+					prep10.setString(1,f.getCliente());
+					prep10.setInt(2, id);
+					prep10.setFloat(3,valortotal);
 					
+					prep10.execute();
+					System.out.println("nusei");
 					
-					PreparedStatement prep = (PreparedStatement) conn.prepareStatement("INSERT INTO venda (cliente,livroId) values (?,"+id+")");
-					prep.setString(1,f.getCliente());
-					prep.execute();
 						
-					PreparedStatement prep2 = (PreparedStatement) conn.prepareStatement("UPDATE livroimpresso SET  (cliente,livroId) values (?,"+id+")");
-					
-					prep2.execute();
+					PreparedStatement prep20 = (PreparedStatement) conn.prepareStatement("UPDATE livroimpresso SET  (estoque) values ("+re+")");
+					prep20.execute();
+					System.out.println("foi");
+					break;
+					default:
 					}
-				}
+				
 			
 		
 			
@@ -289,7 +322,7 @@ public class LivrariaVirtualDAO {
 				// TODO: handle exception
 			}
 			
-		}
+}
 		
 		public void ListarVendas() {
 			try {
