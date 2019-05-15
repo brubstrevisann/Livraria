@@ -59,39 +59,29 @@ public class LivrariaVirtual {
 		Eletronico le = new Eletronico();
 		Venda ve = new Venda();
 		
-		
+		int a = 0;
 		
 		
 		LivrariaVirtualDAO livraDAO = new LivrariaVirtualDAO();
 		
 		
+		 livraDAO.conectar();
+		 while (a < 1) {
 		
-		
-		/*System.out.println("Digite <1> para cadastrar um livro");
+		System.out.println("Digite <1> para cadastrar um livro");
         System.out.println("Digite <2> para realizar uma venda");
         System.out.println("Digite <3> para listar os livros cadastrados");
         System.out.println("Digite <4> para listar as vendas");
         System.out.println("Digite <5> para sair do programa");
         int escolha = teclado.nextInt();
-          */  
-           //switch (escolha) {    
-             //  case 1:
-            	  
-            	//  System.out.println("Impresso ou eletrônico ?");
-            	 // String a = teclado.nextLine();
-            	  
-            	 //if(a=="impresso") { 
-		ve.setCliente("Robertin");
-                  livraDAO.conectar();
-                  livraDAO.RealizarVenda(ve);
-                  //livraDAO.listarLivros();
+            
+          switch (escolha) {    
+               case 1: 
                   
-                  
-                  
-                /*System.out.println("Informe o titulo do livro:");
+                System.out.println("Informe o titulo do livro:");
                  li.setTitulo(teclado.nextLine());
                  
-                 //String lixo3=teclado.nextLine();
+                 String lixo3=teclado.nextLine();
                                
                  System.out.println("Informe os autores");
                  li.setAutores(teclado.nextLine());
@@ -99,74 +89,34 @@ public class LivrariaVirtual {
         
                  System.out.println("Informe a editora do livro:");
                  li.setEditora(teclado.nextLine());
+                 String lixo4 = teclado.nextLine();
+                 
         		
-        		
-        
                  System.out.println("informe o preço do livro:");
                  li.setPreco(teclado.nextFloat());
                  livraDAO.cadastrarLivro(li);
-                */
-                 
-                 /* System.out.println("informe o id do livro:");
-                  li.setId(teclado.nextInt());
-                  
-                  System.out.println("informe o estoque:");
-                  li.setEstoque(teclado.nextInt());
-                  
-                  System.out.println("informe o frete:");
-                  li.setFrete(teclado.nextFloat());
-                  livraDAO.cadastrarLivroImpresso(li);
-                  */
-                  
-            	 //}//else if(a=="eletronico"){
-            		/* System.out.println("Informe o titulo do livro:");
-                     le.setTitulo(teclado.nextLine());
-                     
-                     String lixo3=teclado.nextLine();
-                                   
-                     System.out.println("Informe os autores");
-                     le.setAutores(teclado.nextLine());
-                    
-                     String lixo=teclado.nextLine();
-            
-                     System.out.println("Informe a editora do livro:");
-                     le.setEditora(teclado.nextLine());
-            
-                     String lixo2=teclado.nextLine();
-            
-                     System.out.println("informe o preço do livro:");
-                     le.setPreco(teclado.nextFloat());
-                     //livraDAO.
-                }
                 
-                livraDAO.conectar();
-        
-                 
-                 livraDAO.fechar();
                    break;
                case 2:
-                   //System.out.println(livraDAO.Listar());
+            	   System.out.println("Digite o nome do cliente.");
+                   ve.setCliente(teclado.next());
+                   
+                   livraDAO.RealizarVenda(ve);
                    break;
                
                case 3:
-                   System.out.println("Digite o ID");
-                   //r.setId(teclado.nextInt());
-                   
-                   //livroDAO.RemoverporID(r);
+                  livraDAO.listarLivros();
                    
                    break;
                    
                case 4:
-                 //  System.out.println("Escolha um ID para atualizar o preço:");
-                  // p.setId(teclado.nextInt());
-                  // System.out.println("Escolha o novo preço:");
-                  // p.setPreco(teclado.nextFloat());
-                   
-                  // funcDAO.AtualizarPrecoporID(p);
+                livraDAO.ListarVendas();
                    
                    
                    break;
                case 5:
+            	   livraDAO.fechar();
+            	   a++;
             	   System.exit(0);              
                     break;
                    
@@ -174,7 +124,8 @@ public class LivrariaVirtual {
                    System.out.println("Essa não é uma opção valida");
                    
            }
-	*/
+		 }
+	
 	
 		
 	}
